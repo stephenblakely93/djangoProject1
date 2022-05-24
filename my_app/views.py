@@ -27,3 +27,17 @@ def export(request):
 
     response['Content-Disposition'] = 'attachment; filename="customer_details.csv"'
     return response
+
+
+def export_all(request):
+    response = HttpResponse(content_type='text/csv')
+
+    writer = csv.writer(response)
+    writer.writerow(['Customer Name', 'Properties', 'Parameters', 'Settings', 'Notes'])
+
+    for customer in Customer.objects.all().values_list('customer_name', 'properties', 'parameters', 'settings',
+                                                       'notes'):
+        writer.writerow(customer)
+
+    response['Content-Disposition'] = 'attachment; filename="all_customer_details.csv"'
+    return response
