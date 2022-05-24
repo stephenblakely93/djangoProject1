@@ -35,8 +35,9 @@ def export_all(request):
     writer = csv.writer(response)
     writer.writerow(['Customer Name', 'Properties', 'Parameters', 'Settings', 'Notes'])
 
-    for customer in Customer.objects.all().values_list('customer_name', 'properties', 'parameters', 'settings',
-                                                       'notes'):
+    for customer in Customer.objects.all().order_by('customer_name').values_list('customer_name', 'properties',
+                                                                                 'parameters', 'settings',
+                                                                                 'notes'):
         writer.writerow(customer)
 
     response['Content-Disposition'] = 'attachment; filename="all_customer_details.csv"'
